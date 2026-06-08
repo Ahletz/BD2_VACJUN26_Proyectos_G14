@@ -1,0 +1,48 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: bd2_mysql
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - bd2_network
+
+  python:
+    build:
+      context: ./python
+      dockerfile: Dockerfile
+    container_name: bd2_python
+    restart: unless-stopped
+    env_file:
+      - .env
+    working_dir: /app
+    volumes:
+      - ./python:/app
+      - ./data:/data
+      - ./db:/db
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: tail -f /dev/null
+    networks:
+      - bd2_network
+
+volumes:
+  mysql_data:
+
+networks:
+  bd2_network:

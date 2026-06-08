@@ -1,0 +1,24 @@
+# Variables de entorno
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Archivos procesados
+data/processed/*
+!data/processed/.gitkeep
+
+# Respaldos temporales
+db/backups/*
+!db/backups/.gitkeep
+
+# Editores
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
