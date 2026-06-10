@@ -1,5 +1,4 @@
 pandas
 SQLAlchemy
 PyMySQL
-mysql-connector-python
 python-dotenv
