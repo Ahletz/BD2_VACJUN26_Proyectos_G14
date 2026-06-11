@@ -1,333 +1,499 @@
 import os
 import re
 import sys
+from decimal import Decimal, InvalidOperation
+
 import pandas as pd
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
-# ── Cargar variables de entorno ──────────────────────────────
 load_dotenv()
 
-DB_HOST     = os.getenv("MYSQL_HOST",     "mysql")  
-DB_PORT     = os.getenv("MYSQL_PORT",     "3306")
-DB_NAME     = os.getenv("MYSQL_DATABASE", "banco_db")
-DB_USER     = os.getenv("MYSQL_USER",     "bd2_user")
+DB_HOST = os.getenv("MYSQL_HOST", "mysql")
+DB_PORT = os.getenv("MYSQL_PORT", "3306")
+DB_NAME = os.getenv("MYSQL_DATABASE", "banco_db")
+DB_USER = os.getenv("MYSQL_USER", "bd2_user")
 DB_PASSWORD = os.getenv("MYSQL_PASSWORD", "")
 
-CSV_FILENAME = os.getenv("CSV_FILENAME", "datos_banco.csv")
+RAW_DIR = os.getenv("RAW_DATA_DIR", "/data/raw")
+PROCESSED_DIR = os.getenv("PROCESSED_DATA_DIR", "/data/processed")
+RESET_DATA = os.getenv("RESET_DATA", "true").strip().lower() in {
+    "1", "true", "yes", "si", "sí"
+}
 
-# Rutas dentro del contenedor (mapeadas por docker-compose.yml)
-RAW_PATH       = f"/data/raw/{CSV_FILENAME}"
-PROCESSED_PATH = "/data/processed/"
+ARCHIVOS = {
+    "Sucursal": "sucursales_raw.csv",
+    "Cliente": "clientes_raw.csv",
+    "Empleado": "empleados_raw.csv",
+    "Cuenta": "cuentas_raw.csv",
+    "Movimiento": "transacciones_raw.csv",
+}
 
+ORDEN_CARGA = ["Sucursal", "Cliente", "Empleado", "Cuenta", "Movimiento"]
+ORDEN_LIMPIEZA = ["Movimiento", "Cuenta", "Empleado", "Cliente", "Sucursal"]
 
-
-#  1. CONEXIÓN
+TIPOS_CUENTA = {"ahorro": "Ahorro", "corriente": "Corriente"}
+ESTADOS_CUENTA = {"ACTIVA", "INACTIVA", "CERRADA"}
+TIPOS_TRANSACCION = {
+    "DEPOSITO",
+    "RETIRO",
+    "TRANSFERENCIA_SALIDA",
+    "TRANSFERENCIA_ENTRADA",
+}
 
 
 def crear_engine():
-    url = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    url = (
+        f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}"
+        f"@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
+    )
     try:
-        engine = create_engine(url, echo=False)
+        engine = create_engine(url, pool_pre_ping=True, future=True)
         with engine.connect() as conn:
-            version = conn.execute(text("SELECT VERSION()")).scalar()
-        print(f"Conexión exitosa a MySQL.")
-        print(f"Versión del servidor: {version}")
+            version = conn.execute(text("SELECT VERSION()")) .scalar_one()
+        print(f"[OK] Conexión a MySQL {version}")
         return engine
-    except SQLAlchemyError as e:
-        print(f"[ERROR] No se pudo conectar a MySQL: {e}")
+    except SQLAlchemyError as exc:
+        print(f"[ERROR] No fue posible conectar a MySQL: {exc}")
         sys.exit(1)
 
 
-#  2. LIMPIEZA
+def leer_csv(nombre_archivo):
+    ruta = os.path.join(RAW_DIR, nombre_archivo)
+    if not os.path.exists(ruta):
+        raise FileNotFoundError(f"No se encontró: {ruta}")
 
-
-def limpiar_texto(v):
-    return str(v).strip() if pd.notna(v) else None
-
-def limpiar_nombre(v):
-    return " ".join(str(v).strip().title().split()) if pd.notna(v) else None
-
-def limpiar_telefono(v):
-    return re.sub(r'\D', '', str(v)) if pd.notna(v) else None
-
-def limpiar_correo(v):
-    return str(v).strip().lower() if pd.notna(v) else None
-
-def limpiar_monto(v):
-    if pd.isna(v):
-        return 0.0
-    limpio = re.sub(r'[Q$,\s]', '', str(v))
     try:
-        return float(limpio)
-    except ValueError:
-        print(f"  [AVISO] Monto no convertible: '{v}' → 0.0")
-        return 0.0
+        df = pd.read_csv(ruta, dtype=str, encoding="utf-8")
+    except UnicodeDecodeError:
+        df = pd.read_csv(ruta, dtype=str, encoding="latin-1")
 
-def limpiar_fecha(v):
-    if pd.isna(v):
+    df.columns = [str(col).strip() for col in df.columns]
+    df.dropna(how="all", inplace=True)
+    return df.reset_index(drop=True)
+
+
+def texto(valor):
+    if pd.isna(valor):
+        return None
+    valor = re.sub(r"\s+", " ", str(valor).strip())
+    return valor or None
+
+
+def nombre(valor):
+    valor = texto(valor)
+    return valor.title() if valor else None
+
+
+def telefono(valor):
+    valor = texto(valor)
+    if not valor:
+        return None
+    limpio = re.sub(r"\D", "", valor)
+    return limpio or None
+
+
+def correo(valor):
+    valor = texto(valor)
+    return valor.lower() if valor else None
+
+
+def entero(valor, campo):
+    valor = texto(valor)
+    if valor is None:
         return None
     try:
-        return pd.to_datetime(str(v), dayfirst=False).strftime("%Y-%m-%d")
-    except Exception:
-        print(f"  [AVISO] Fecha no convertible: '{v}' → None")
+        return int(float(valor))
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"Valor inválido en {campo}: {valor}") from exc
+
+
+def monto(valor, campo="Monto"):
+    valor = texto(valor)
+    if valor is None:
+        raise ValueError(f"El campo {campo} no puede estar vacío")
+    limpio = re.sub(r"[Q$€,\s]", "", valor)
+    try:
+        numero = Decimal(limpio).quantize(Decimal("0.01"))
+    except InvalidOperation as exc:
+        raise ValueError(f"Valor monetario inválido en {campo}: {valor}") from exc
+    return float(numero)
+
+
+def fecha(valor, campo):
+    valor = texto(valor)
+    if valor is None:
         return None
-
-def limpiar_dni(v):
-    return re.sub(r'\s+', '', str(v).strip()) if pd.notna(v) else None
-
-
-def limpiar(df):
-    print("\n── FASE 1: LIMPIEZA ────────────────────────────────────")
-    print(f"  Filas originales : {len(df)}")
-
-    # Estandarizar nombres de columnas
-    df.columns = (df.columns.str.strip().str.lower()
-                  .str.replace(' ', '_').str.replace('-', '_'))
-
-    # Eliminar filas vacías y duplicados exactos
-    df.dropna(how='all', inplace=True)
-    df.drop_duplicates(inplace=True)
-
-    # ── Aplicar limpieza por tipo de columna ──────────────────
-    # *** Ajusta los nombres si tu CSV tiene columnas distintas ***
-
-    cols_nombre    = ['nombre_cliente', 'nombre_empleado', 'nombre']
-    cols_dni       = ['cliente_dni', 'dni', 'dpi']
-    cols_telefono  = ['telefono', 'telefono_cliente']
-    cols_correo    = ['correo', 'correo_electronico', 'email']
-    cols_monto     = ['saldo', 'monto', 'saldo_inicial', 'saldo_actual']
-    cols_fecha     = ['fecha_nacimiento', 'fecha_apertura', 'fecha_transaccion']
-    cols_texto     = ['tipo_cuenta', 'tipo_transaccion', 'descripcion',
-                      'nombre_sucursal', 'direccion_sucursal', 'cargo']
-
-    for c in cols_nombre:
-        if c in df.columns: df[c] = df[c].apply(limpiar_nombre)
-    for c in cols_dni:
-        if c in df.columns: df[c] = df[c].apply(limpiar_dni)
-    for c in cols_telefono:
-        if c in df.columns: df[c] = df[c].apply(limpiar_telefono)
-    for c in cols_correo:
-        if c in df.columns: df[c] = df[c].apply(limpiar_correo)
-    for c in cols_monto:
-        if c in df.columns: df[c] = df[c].apply(limpiar_monto)
-    for c in cols_fecha:
-        if c in df.columns: df[c] = df[c].apply(limpiar_fecha)
-    for c in cols_texto:
-        if c in df.columns: df[c] = df[c].apply(limpiar_texto)
-
-    # Montos negativos → 0
-    for c in cols_monto:
-        if c in df.columns:
-            neg = (df[c] < 0).sum()
-            if neg:
-                print(f"  [AVISO] {neg} valores negativos en '{c}' → convertidos a 0")
-                df.loc[df[c] < 0, c] = 0.0
-
-    print(f"  Filas después de limpiar: {len(df)}")
-    nulos = df.isnull().sum()
-    nulos = nulos[nulos > 0]
-    if not nulos.empty:
-        print("  Nulos restantes:")
-        print(nulos.to_string())
-    print("  [OK] Limpieza completada.")
-    return df
+    convertido = pd.to_datetime(valor, errors="coerce")
+    if pd.isna(convertido):
+        raise ValueError(f"Fecha inválida en {campo}: {valor}")
+    return convertido.strftime("%Y-%m-%d")
 
 
+def fecha_hora(valor, campo):
+    valor = texto(valor)
+    if valor is None:
+        return None
+    convertido = pd.to_datetime(valor, errors="coerce")
+    if pd.isna(convertido):
+        raise ValueError(f"Fecha inválida en {campo}: {valor}")
+    return convertido.strftime("%Y-%m-%d %H:%M:%S")
 
-#  3. TRANSFORMACIÓN  (una tabla plana → tablas normalizadas)
+
+def registrar_duplicados(df, llave, archivo, anomalias, accion):
+    duplicados = df[df.duplicated(subset=llave, keep=False)]
+    if duplicados.empty:
+        return
+
+    for valores, grupo in duplicados.groupby(llave, dropna=False, sort=False):
+        if not isinstance(valores, tuple):
+            valores = (valores,)
+        detalle = ", ".join(
+            f"{campo}={valor}" for campo, valor in zip(llave, valores)
+        )
+        anomalias.append({
+            "Archivo": archivo,
+            "Tipo": "DUPLICADO",
+            "Detalle": detalle,
+            "Cantidad": len(grupo),
+            "Accion": accion,
+        })
 
 
-def transformar(df):
-    print("\n── FASE 2: TRANSFORMACIÓN ──────────────────────────────")
+def preparar_sucursales(df, anomalias):
+    requeridas = {
+        "SucursalID", "SucursalNombre", "SucursalDireccion", "SucursalTelefono"
+    }
+    validar_columnas(df, requeridas, ARCHIVOS["Sucursal"])
+
+    resultado = pd.DataFrame({
+        "SucursalID": df["SucursalID"].apply(lambda v: entero(v, "SucursalID")),
+        "SucursalNombre": df["SucursalNombre"].apply(nombre),
+        "SucursalDireccion": df["SucursalDireccion"].apply(texto),
+        "SucursalTelefono": df["SucursalTelefono"].apply(telefono),
+    })
+
+    registrar_duplicados(
+        resultado, ["SucursalID"], ARCHIVOS["Sucursal"], anomalias,
+        "Se conserva la primera aparición por SucursalID",
+    )
+    resultado.drop_duplicates(subset=["SucursalID"], keep="first", inplace=True)
+    return resultado.reset_index(drop=True)
+
+
+def preparar_clientes(df, anomalias):
+    requeridas = {
+        "ClienteDNI", "ClienteNombre", "ClienteFechaNacimiento",
+        "ClienteDireccion", "ClienteTelefono", "ClienteCorreo",
+    }
+    validar_columnas(df, requeridas, ARCHIVOS["Cliente"])
+
+    resultado = pd.DataFrame({
+        "ClienteDNI": df["ClienteDNI"].apply(texto),
+        "ClienteNombre": df["ClienteNombre"].apply(nombre),
+        "ClienteFechaNacimiento": df["ClienteFechaNacimiento"].apply(
+            lambda v: fecha(v, "ClienteFechaNacimiento")
+        ),
+        "ClienteDireccion": df["ClienteDireccion"].apply(texto),
+        "ClienteTelefono": df["ClienteTelefono"].apply(telefono),
+        "ClienteCorreo": df["ClienteCorreo"].apply(correo),
+    })
+
+    registrar_duplicados(
+        resultado, ["ClienteDNI"], ARCHIVOS["Cliente"], anomalias,
+        "Se conserva la primera aparición por ClienteDNI",
+    )
+    resultado.drop_duplicates(subset=["ClienteDNI"], keep="first", inplace=True)
+    resultado.reset_index(drop=True, inplace=True)
+    resultado.insert(0, "ClienteID", range(1, len(resultado) + 1))
+    return resultado
+
+
+def preparar_empleados(df, anomalias):
+    requeridas = {"EmpleadoID", "EmpleadoNombre", "EmpleadoCargo", "SucursalID"}
+    validar_columnas(df, requeridas, ARCHIVOS["Empleado"])
+
+    resultado = pd.DataFrame({
+        "EmpleadoID": df["EmpleadoID"].apply(lambda v: entero(v, "EmpleadoID")),
+        "EmpleadoNombre": df["EmpleadoNombre"].apply(nombre),
+        "EmpleadoCargo": df["EmpleadoCargo"].apply(nombre),
+        "SucursalID": df["SucursalID"].apply(lambda v: entero(v, "SucursalID")),
+    })
+
+    registrar_duplicados(
+        resultado, ["EmpleadoID"], ARCHIVOS["Empleado"], anomalias,
+        "Se conserva la primera aparición por EmpleadoID",
+    )
+    resultado.drop_duplicates(subset=["EmpleadoID"], keep="first", inplace=True)
+    return resultado.reset_index(drop=True)
+
+
+def preparar_cuentas(df, clientes, anomalias):
+    requeridas = {
+        "CuentaID", "TipoCuenta", "FechaApertura", "SaldoActual",
+        "EstadoCuenta", "ClienteDNI", "SucursalID",
+    }
+    validar_columnas(df, requeridas, ARCHIVOS["Cuenta"])
+
+    resultado = pd.DataFrame({
+        "CuentaID": df["CuentaID"].apply(lambda v: entero(v, "CuentaID")),
+        "TipoCuenta": df["TipoCuenta"].apply(
+            lambda v: TIPOS_CUENTA.get((texto(v) or "").lower())
+        ),
+        "FechaApertura": df["FechaApertura"].apply(
+            lambda v: fecha(v, "FechaApertura")
+        ),
+        "FechaCierre": None,
+        "SaldoActual": df["SaldoActual"].apply(lambda v: monto(v, "SaldoActual")),
+        "EstadoCuenta": df["EstadoCuenta"].apply(
+            lambda v: (texto(v) or "").upper()
+        ),
+        "ClienteDNI": df["ClienteDNI"].apply(texto),
+        "SucursalID": df["SucursalID"].apply(lambda v: entero(v, "SucursalID")),
+    })
+
+    registrar_duplicados(
+        resultado, ["CuentaID"], ARCHIVOS["Cuenta"], anomalias,
+        "Se conserva la primera aparición por CuentaID",
+    )
+    resultado.drop_duplicates(subset=["CuentaID"], keep="first", inplace=True)
+
+    mapa_clientes = clientes.set_index("ClienteDNI")["ClienteID"].to_dict()
+    resultado["ClienteID"] = resultado["ClienteDNI"].map(mapa_clientes)
+
+    if resultado["ClienteID"].isna().any():
+        faltantes = resultado.loc[resultado["ClienteID"].isna(), "ClienteDNI"].tolist()
+        raise ValueError(f"Clientes no encontrados para las cuentas: {faltantes}")
+
+    resultado["ClienteID"] = resultado["ClienteID"].astype(int)
+    resultado.drop(columns=["ClienteDNI"], inplace=True)
+    columnas = [
+        "CuentaID", "TipoCuenta", "FechaApertura", "FechaCierre",
+        "SaldoActual", "EstadoCuenta", "ClienteID", "SucursalID",
+    ]
+    return resultado[columnas].reset_index(drop=True)
+
+
+def preparar_movimientos(df, anomalias):
+    requeridas = {
+        "MovimientoID", "TransferenciaID", "Fecha", "TipoTransaccion",
+        "Monto", "Descripcion", "CuentaID", "EmpleadoID",
+    }
+    validar_columnas(df, requeridas, ARCHIVOS["Movimiento"])
+
+    resultado = pd.DataFrame({
+        "MovimientoID": df["MovimientoID"].apply(
+            lambda v: entero(v, "MovimientoID")
+        ),
+        "TransferenciaRef": df["TransferenciaID"].apply(texto),
+        "Fecha": df["Fecha"].apply(lambda v: fecha_hora(v, "Fecha")),
+        "TipoTransaccion": df["TipoTransaccion"].apply(
+            lambda v: (texto(v) or "").upper()
+        ),
+        "Monto": df["Monto"].apply(lambda v: monto(v, "Monto")),
+        "Descripcion": df["Descripcion"].apply(texto),
+        "CuentaID": df["CuentaID"].apply(lambda v: entero(v, "CuentaID")),
+        "EmpleadoID": df["EmpleadoID"].apply(
+            lambda v: entero(v, "EmpleadoID") if texto(v) is not None else None
+        ),
+    })
+
+    resultado["ClaveNegocio"] = resultado.apply(clave_movimiento, axis=1)
+    registrar_duplicados(
+        resultado, ["ClaveNegocio"], ARCHIVOS["Movimiento"], anomalias,
+        "Se conserva la primera aparición según la operación bancaria",
+    )
+    resultado.drop_duplicates(subset=["ClaveNegocio"], keep="first", inplace=True)
+    resultado.drop(columns=["ClaveNegocio"], inplace=True)
+    return resultado.reset_index(drop=True)
+
+
+def clave_movimiento(fila):
+    if fila["TransferenciaRef"]:
+        return f"TR|{fila['TransferenciaRef']}|{fila['TipoTransaccion']}"
+    return "|".join([
+        "OP",
+        str(fila["Fecha"]),
+        str(fila["TipoTransaccion"]),
+        f"{fila['Monto']:.2f}",
+        str(fila["Descripcion"]),
+        str(fila["CuentaID"]),
+        str(fila["EmpleadoID"]),
+    ])
+
+
+def validar_columnas(df, requeridas, archivo):
+    faltantes = sorted(requeridas.difference(df.columns))
+    if faltantes:
+        raise ValueError(f"Columnas faltantes en {archivo}: {', '.join(faltantes)}")
+
+
+def validar_integridad(tablas):
+    sucursales = set(tablas["Sucursal"]["SucursalID"])
+    clientes = set(tablas["Cliente"]["ClienteID"])
+    empleados = set(tablas["Empleado"]["EmpleadoID"])
+    cuentas = set(tablas["Cuenta"]["CuentaID"])
+
+    if not set(tablas["Empleado"]["SucursalID"]).issubset(sucursales):
+        raise ValueError("Existen empleados asociados a sucursales inexistentes")
+
+    if not set(tablas["Cuenta"]["SucursalID"]).issubset(sucursales):
+        raise ValueError("Existen cuentas asociadas a sucursales inexistentes")
+
+    if not set(tablas["Cuenta"]["ClienteID"]).issubset(clientes):
+        raise ValueError("Existen cuentas asociadas a clientes inexistentes")
+
+    if not set(tablas["Cuenta"]["TipoCuenta"]).issubset(set(TIPOS_CUENTA.values())):
+        raise ValueError("Existen tipos de cuenta inválidos")
+
+    if not set(tablas["Cuenta"]["EstadoCuenta"]).issubset(ESTADOS_CUENTA):
+        raise ValueError("Existen estados de cuenta inválidos")
+
+    movimientos = tablas["Movimiento"]
+    if not set(movimientos["CuentaID"]).issubset(cuentas):
+        raise ValueError("Existen movimientos asociados a cuentas inexistentes")
+
+    ids_empleados = set(movimientos["EmpleadoID"].dropna().astype(int))
+    if not ids_empleados.issubset(empleados):
+        raise ValueError("Existen movimientos asociados a empleados inexistentes")
+
+    if not set(movimientos["TipoTransaccion"]).issubset(TIPOS_TRANSACCION):
+        raise ValueError("Existen tipos de transacción inválidos")
+
+    if (movimientos["Monto"] <= 0).any():
+        raise ValueError("Todos los movimientos deben tener monto positivo")
+
+    es_transferencia = movimientos["TipoTransaccion"].str.startswith("TRANSFERENCIA_")
+    if movimientos.loc[es_transferencia, "TransferenciaRef"].isna().any():
+        raise ValueError("Toda transferencia debe tener referencia")
+    if movimientos.loc[~es_transferencia, "TransferenciaRef"].notna().any():
+        raise ValueError("Los depósitos y retiros no deben tener referencia")
+
+    transferencias = movimientos[es_transferencia]
+    for referencia, grupo in transferencias.groupby("TransferenciaRef"):
+        tipos = set(grupo["TipoTransaccion"])
+        if tipos != {"TRANSFERENCIA_SALIDA", "TRANSFERENCIA_ENTRADA"}:
+            raise ValueError(f"Transferencia incompleta: {referencia}")
+        if grupo["Monto"].nunique() != 1:
+            raise ValueError(f"Montos inconsistentes en transferencia: {referencia}")
+
+
+def preparar_datos():
+    anomalias = []
+
+    raw_sucursales = leer_csv(ARCHIVOS["Sucursal"])
+    raw_clientes = leer_csv(ARCHIVOS["Cliente"])
+    raw_empleados = leer_csv(ARCHIVOS["Empleado"])
+    raw_cuentas = leer_csv(ARCHIVOS["Cuenta"])
+    raw_movimientos = leer_csv(ARCHIVOS["Movimiento"])
 
     tablas = {}
+    tablas["Sucursal"] = preparar_sucursales(raw_sucursales, anomalias)
+    tablas["Cliente"] = preparar_clientes(raw_clientes, anomalias)
+    tablas["Empleado"] = preparar_empleados(raw_empleados, anomalias)
+    tablas["Cuenta"] = preparar_cuentas(raw_cuentas, tablas["Cliente"], anomalias)
+    tablas["Movimiento"] = preparar_movimientos(raw_movimientos, anomalias)
 
-    # ── Sucursal ──────────────────────────────────────────────
-    if 'nombre_sucursal' in df.columns:
-        cols = ['nombre_sucursal']
-        if 'direccion_sucursal' in df.columns:
-            cols.append('direccion_sucursal')
-        suc = (df[cols].drop_duplicates(subset=['nombre_sucursal'])
-               .reset_index(drop=True))
-        suc.insert(0, 'sucursal_id', range(1, len(suc) + 1))
-        suc.rename(columns={'nombre_sucursal': 'nombre',
-                             'direccion_sucursal': 'direccion'}, inplace=True)
-        tablas['sucursal'] = suc
-        print(f"  sucursal     : {len(suc)} filas")
-
-    # ── Cliente ───────────────────────────────────────────────
-    col_dni = next((c for c in ['cliente_dni', 'dni', 'dpi'] if c in df.columns), None)
-    col_nom = next((c for c in ['nombre_cliente', 'nombre'] if c in df.columns), None)
-    if col_dni and col_nom:
-        cols = [col_dni, col_nom]
-        for opt in ['fecha_nacimiento', 'direccion', 'telefono',
-                    'correo', 'correo_electronico', 'email']:
-            if opt in df.columns:
-                cols.append(opt)
-        cli = (df[cols].drop_duplicates(subset=[col_dni])
-               .reset_index(drop=True))
-        cli.rename(columns={col_dni: 'dni', col_nom: 'nombre'}, inplace=True)
-        tablas['cliente'] = cli
-        print(f"  cliente      : {len(cli)} filas")
-
-    # ── Empleado ──────────────────────────────────────────────
-    col_emp = next((c for c in ['nombre_empleado'] if c in df.columns), None)
-    if col_emp:
-        cols = [col_emp]
-        for opt in ['empleado_id', 'cargo', 'nombre_sucursal']:
-            if opt in df.columns:
-                cols.append(opt)
-        emp = (df[cols].drop_duplicates(subset=[col_emp])
-               .reset_index(drop=True))
-        if 'empleado_id' not in emp.columns:
-            emp.insert(0, 'empleado_id', range(1, len(emp) + 1))
-        emp.rename(columns={col_emp: 'nombre'}, inplace=True)
-        # Mapear sucursal_id
-        if 'nombre_sucursal' in emp.columns and 'sucursal' in tablas:
-            emp = emp.merge(tablas['sucursal'][['sucursal_id', 'nombre']],
-                            left_on='nombre_sucursal', right_on='nombre',
-                            how='left', suffixes=('', '_suc'))
-            emp.drop(columns=['nombre_sucursal', 'nombre_suc'], inplace=True)
-        tablas['empleado'] = emp
-        print(f"  empleado     : {len(emp)} filas")
-
-    # ── Cuenta ────────────────────────────────────────────────
-    if 'tipo_cuenta' in df.columns and col_dni:
-        cols = [col_dni, 'tipo_cuenta']
-        for opt in ['cuenta_id', 'numero_cuenta', 'saldo_inicial',
-                    'saldo_actual', 'fecha_apertura', 'nombre_sucursal']:
-            if opt in df.columns:
-                cols.append(opt)
-        cta = df[cols].drop_duplicates().reset_index(drop=True)
-        if 'cuenta_id' not in cta.columns and 'numero_cuenta' not in cta.columns:
-            cta.insert(0, 'cuenta_id', range(1, len(cta) + 1))
-        cta.rename(columns={col_dni: 'cliente_dni'}, inplace=True)
-        if 'nombre_sucursal' in cta.columns and 'sucursal' in tablas:
-            cta = cta.merge(tablas['sucursal'][['sucursal_id', 'nombre']],
-                            left_on='nombre_sucursal', right_on='nombre',
-                            how='left')
-            cta.drop(columns=['nombre', 'nombre_sucursal'], inplace=True)
-        cta['estado'] = 'activa'
-        if 'fecha_apertura' not in cta.columns:
-            cta['fecha_apertura'] = pd.Timestamp.today().strftime('%Y-%m-%d')
-        tablas['cuenta'] = cta
-        print(f"  cuenta       : {len(cta)} filas")
-
-    # ── Transaccion ───────────────────────────────────────────
-    if 'tipo_transaccion' in df.columns and 'monto' in df.columns:
-        cols = ['tipo_transaccion', 'monto']
-        for opt in ['cuenta_id', 'numero_cuenta', 'descripcion',
-                    'fecha_transaccion', 'empleado_id']:
-            if opt in df.columns:
-                cols.append(opt)
-        trx = df[cols].copy().reset_index(drop=True)
-        trx.insert(0, 'transaccion_id', range(1, len(trx) + 1))
-        if 'fecha_transaccion' not in trx.columns:
-            trx['fecha_transaccion'] = pd.Timestamp.today().strftime('%Y-%m-%d')
-        if 'descripcion' not in trx.columns:
-            trx['descripcion'] = trx['tipo_transaccion']
-        tablas['transaccion'] = trx
-        print(f"  transaccion  : {len(trx)} filas")
-
-    # Guardar CSVs procesados
-    os.makedirs(PROCESSED_PATH, exist_ok=True)
-    for nombre, tabla in tablas.items():
-        ruta = os.path.join(PROCESSED_PATH, f"{nombre}.csv")
-        tabla.to_csv(ruta, index=False, encoding='utf-8')
-
-    print("  [OK] Transformación completada. CSVs guardados en data/processed/")
+    validar_integridad(tablas)
+    guardar_procesados(tablas, anomalias)
     return tablas
 
 
+def guardar_procesados(tablas, anomalias):
+    os.makedirs(PROCESSED_DIR, exist_ok=True)
 
-#  4. CARGA A MYSQL
+    for nombre, df in tablas.items():
+        ruta = os.path.join(PROCESSED_DIR, f"{nombre.lower()}.csv")
+        df.to_csv(ruta, index=False, encoding="utf-8", na_rep="")
+        print(f"[OK] {ruta}: {len(df)} filas")
 
-
-# Orden de inserción respetando llaves foráneas
-ORDEN_CARGA = ['sucursal', 'cliente', 'empleado', 'cuenta', 'transaccion']
-
-
-def cargar(engine, tablas):
-    print("\n── FASE 3: CARGA A MySQL ───────────────────────────────")
-    for nombre in ORDEN_CARGA:
-        df = tablas.get(nombre)
-        if df is None or df.empty:
-            print(f"  [OMITIDA] {nombre}")
-            continue
-        try:
-            df.to_sql(nombre, con=engine, if_exists='append',
-                      index=False, chunksize=500, method='multi')
-            print(f"  [OK] {nombre:12s}: {len(df)} filas insertadas")
-        except SQLAlchemyError as e:
-            print(f"  [ERROR] {nombre}: {e}")
-            raise
+    columnas = ["Archivo", "Tipo", "Detalle", "Cantidad", "Accion"]
+    reporte = pd.DataFrame(anomalias, columns=columnas)
+    ruta_anomalias = os.path.join(PROCESSED_DIR, "anomalias.csv")
+    reporte.to_csv(ruta_anomalias, index=False, encoding="utf-8")
+    print(f"[OK] {ruta_anomalias}: {len(reporte)} anomalías agrupadas")
 
 
+def validar_catalogos(conn):
+    catalogos = {
+        "TipoCuenta": ("TipoCuenta", set(TIPOS_CUENTA.values())),
+        "EstadoCuenta": ("EstadoCuenta", ESTADOS_CUENTA),
+        "TipoTransaccion": ("TipoTransaccion", TIPOS_TRANSACCION),
+    }
 
-#  5. VALIDACIÓN
-
-
-def validar(engine, tablas):
-    print("\n── FASE 4: VALIDACIÓN ──────────────────────────────────")
-    todos_ok = True
-    for nombre in ORDEN_CARGA:
-        df = tablas.get(nombre)
-        if df is None:
-            continue
-        try:
-            with engine.connect() as conn:
-                en_bd = conn.execute(text(f"SELECT COUNT(*) FROM {nombre}")).scalar()
-            esperadas = len(df)
-            estado = "✓" if en_bd == esperadas else "✗ DIFERENCIA"
-            if en_bd != esperadas:
-                todos_ok = False
-            print(f"  {nombre:12s}: esperadas={esperadas:5d}  en BD={en_bd:5d}  {estado}")
-        except SQLAlchemyError as e:
-            print(f"  [ERROR al validar] {nombre}: {e}")
-            todos_ok = False
-
-    if todos_ok:
-        print("\n  [OK] Todos los datos migrados correctamente.")
-    else:
-        print("\n  [ADVERTENCIA] Hay diferencias. Revisar logs.")
+    for tabla, (columna, esperados) in catalogos.items():
+        encontrados = {
+            fila[0]
+            for fila in conn.execute(text(f"SELECT {columna} FROM {tabla}"))
+        }
+        faltantes = esperados.difference(encontrados)
+        if faltantes:
+            raise ValueError(
+                f"Faltan valores en {tabla}: {', '.join(sorted(faltantes))}. "
+                "Ejecuta db/dml/01_insert_catalogs.sql antes de migrar."
+            )
 
 
-#  MAIN
+def cargar_datos(engine, tablas):
+    try:
+        with engine.begin() as conn:
+            validar_catalogos(conn)
+
+            if RESET_DATA:
+                for tabla in ORDEN_LIMPIEZA:
+                    conn.execute(text(f"DELETE FROM {tabla}"))
+                print("[OK] Datos anteriores eliminados")
+
+            for tabla in ORDEN_CARGA:
+                tablas[tabla].to_sql(
+                    tabla,
+                    con=conn,
+                    if_exists="append",
+                    index=False,
+                    chunksize=500,
+                    method="multi",
+                )
+                print(f"[OK] {tabla}: {len(tablas[tabla])} filas cargadas")
+    except (SQLAlchemyError, ValueError) as exc:
+        print(f"[ERROR] Falló la carga: {exc}")
+        raise
+
+
+def validar_carga(engine, tablas):
+    todo_correcto = True
+    with engine.connect() as conn:
+        for tabla in ORDEN_CARGA:
+            total_bd = conn.execute(text(f"SELECT COUNT(*) FROM {tabla}")) .scalar_one()
+            total_esperado = len(tablas[tabla])
+            estado = "OK" if total_bd == total_esperado else "DIFERENCIA"
+            print(
+                f"[{estado}] {tabla}: esperado={total_esperado}, base={total_bd}"
+            )
+            if total_bd != total_esperado:
+                todo_correcto = False
+
+    if not todo_correcto:
+        raise RuntimeError("La validación detectó diferencias en la carga")
+
 
 def main():
-    print("=" * 55)
-    print("  MIGRACIÓN DE DATOS — Proyecto BD2, Grupo 14")
-    print("=" * 55)
-
-    # Conexión
-    engine = crear_engine()
-
-    # Leer CSV original
-    print(f"\n[INFO] Leyendo CSV: {RAW_PATH}")
-    if not os.path.exists(RAW_PATH):
-        print(f"[ERROR] No se encontró el archivo: {RAW_PATH}")
-        print("  Coloca el CSV en data/raw/ con el nombre indicado en CSV_FILENAME del .env")
-        sys.exit(1)
+    print("=" * 60)
+    print("MIGRACIÓN DE DATOS - PROYECTO BD2 GRUPO 14")
+    print("=" * 60)
 
     try:
-        df = pd.read_csv(RAW_PATH, encoding='utf-8')
-    except UnicodeDecodeError:
-        df = pd.read_csv(RAW_PATH, encoding='latin-1')
-        print("[AVISO] Se usó encoding latin-1")
+        tablas = preparar_datos()
+        engine = crear_engine()
+        cargar_datos(engine, tablas)
+        validar_carga(engine, tablas)
+    except (FileNotFoundError, ValueError, RuntimeError, SQLAlchemyError) as exc:
+        print(f"[ERROR] {exc}")
+        sys.exit(1)
 
-    print(f"  {len(df)} filas, {len(df.columns)} columnas")
-
-    # Pipeline
-    df_limpio = limpiar(df)
-    tablas    = transformar(df_limpio)
-    cargar(engine, tablas)
-    validar(engine, tablas)
-
-    print("\n" + "=" * 55)
-    print("  Migración finalizada.")
-    print("=" * 55)
+    print("=" * 60)
+    print("MIGRACIÓN FINALIZADA CORRECTAMENTE")
+    print("=" * 60)
 
 
 if __name__ == "__main__":

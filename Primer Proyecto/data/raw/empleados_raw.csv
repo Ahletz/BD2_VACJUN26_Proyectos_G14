@@ -1,0 +1,8 @@
+EmpleadoID,EmpleadoNombre,EmpleadoCargo,SucursalID,SucursalNombre,SucursalDireccion,SucursalTelefono
+501,Ana Torres,Cajero,1,Centro,Av Principal 10-55,55520001
+502,Luis Perez,Ejecutivo,1,Centro,Av Principal 10-55,55520001
+503,Carla Gomez,Cajero,2,Norte,Calzada Norte 7-90,55520002
+504,Marco Ruiz,Cajero,3,Sur,Blvd Sur 2-15,55520003
+501,Ana Torres,Cajero,1,Centro,Av Principal 10-55,55520001
+503,Carla Gomez,Cajero Jr,2,Norte,Calzada Norte 7-90,55520002
+504,Marco Ruiz,Cajero,3,Sur,Blvd Sur 2-15,55520002

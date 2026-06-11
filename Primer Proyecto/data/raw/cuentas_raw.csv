@@ -1,0 +1,10 @@
+CuentaID,TipoCuenta,FechaApertura,SaldoActual,EstadoCuenta,ClienteDNI,ClienteNombre,ClienteFechaNacimiento,ClienteDireccion,ClienteTelefono,ClienteCorreo,SucursalID,SucursalNombre,SucursalDireccion,SucursalTelefono
+1001,Ahorro,2025-11-20,3800.00,ACTIVA,10001,Jose Morales,2001-03-12,Colonia Centro 5-21,55510001,jose.morales@mail.com,1,Centro,Av Principal 10-55,55520001
+1002,Corriente,2025-12-05,900.00,ACTIVA,10002,Maria Lopez,1999-07-08,Colonia Jardin 1-10,55510002,maria.lopez@mail.com,1,Centro,Av Principal 10-55,55520001
+1003,Ahorro,2025-10-02,3750.00,ACTIVA,10003,Carlos Diaz,1995-11-30,Barrio Norte 3-44,55510003,carlos.diaz@mail.com,2,Norte,Calzada Norte 7-90,55520002
+1004,Ahorro,2025-09-18,3800.00,ACTIVA,10004,Ana Ramirez,2002-01-25,Colonia Norte 4-22,55510004,ana.ramirez@mail.com,2,Norte,Calzada Norte 7-90,55520002
+1005,Corriente,2025-08-12,800.00,ACTIVA,10005,Pedro Castro,1990-05-14,Colonia Sur 8-12,55510005,pedro.castro@mail.com,3,Sur,Blvd Sur 2-15,55520003
+1006,Ahorro,2025-07-30,0.00,INACTIVA,10006,Sofia Vega,1998-09-09,Colonia Sur 3-09,55510006,sofia.vega@mail.com,3,Sur,Blvd Sur 2-15,55520003
+1001,Ahorro,2025-11-20,3500.00,ACTIVA,10001,Jose Morales,2001-03-12,Colonia Centro 5-21,55510001,jose.morales@mail.com,1,Centro,Av Principal 10-55,55520001
+1003,Ahorro,2025-10-02,4550.00,ACTIVA,10003,Carlos Diaz,1995-11-30,Barrio Norte 3-44,55510003,carlos.diaz@mail.com,2,Norte,Calzada Norte 7-90,55520002
+1006,Ahorro,2025-07-30,0.00,ACTIVA,10006,Sofia Vega,1998-09-09,Colonia Sur 3-09,55510006,sofia.vega@mail.com,3,Sur,Blvd Sur 2-15,55520003

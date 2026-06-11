@@ -1,0 +1,19 @@
+MovimientoID,TransferenciaID,Fecha,TipoTransaccion,Monto,Descripcion,CuentaID,TipoCuenta,ClienteDNI,EmpleadoID,EmpleadoNombre,EmpleadoCargo,SucursalID,SucursalNombre
+1,,2026-01-10,DEPOSITO,1500.00,Deposito en ventanilla,1001,Ahorro,10001,501,Ana Torres,Cajero,1,Centro
+2,,2026-01-12,RETIRO,200.00,Retiro en ventanilla,1001,Ahorro,10001,501,Ana Torres,Cajero,1,Centro
+3,,2026-01-15,DEPOSITO,500.00,Deposito en ventanilla,1002,Corriente,10002,502,Luis Perez,Ejecutivo,1,Centro
+4,,2026-01-17,RETIRO,300.00,Retiro ATM,1002,Corriente,10002,502,Luis Perez,Ejecutivo,1,Centro
+5,,2026-02-01,DEPOSITO,2000.00,Deposito en ventanilla,1003,Ahorro,10003,503,Carla Gomez,Cajero,2,Norte
+6,,2026-02-03,RETIRO,450.00,Retiro en ventanilla,1003,Ahorro,10003,503,Carla Gomez,Cajero,2,Norte
+7,TR-100,2026-02-05,TRANSFERENCIA_SALIDA,800.00,Transferencia a cuenta 1004,1003,Ahorro,10003,503,Carla Gomez,Cajero,2,Norte
+8,TR-100,2026-02-05,TRANSFERENCIA_ENTRADA,800.00,Transferencia desde cuenta 1003,1004,Ahorro,10004,503,Carla Gomez,Cajero,2,Norte
+9,,2026-02-10,DEPOSITO,1200.00,Deposito en ventanilla,1004,Ahorro,10004,503,Carla Gomez,Cajero,2,Norte
+10,,2026-02-12,DEPOSITO,900.00,Deposito en ventanilla,1005,Corriente,10005,504,Marco Ruiz,Cajero,3,Sur
+11,,2026-02-15,RETIRO,600.00,Retiro en ventanilla,1005,Corriente,10005,504,Marco Ruiz,Cajero,3,Sur
+12,TR-101,2026-02-20,TRANSFERENCIA_SALIDA,500.00,Transferencia a cuenta 1001,1005,Corriente,10005,504,Marco Ruiz,Cajero,3,Sur
+13,TR-101,2026-02-20,TRANSFERENCIA_ENTRADA,500.00,Transferencia desde cuenta 1005,1001,Ahorro,10001,501,Ana Torres,Cajero,1,Centro
+14,,2026-02-25,DEPOSITO,300.00,Deposito en ventanilla,1006,Ahorro,10006,504,Marco Ruiz,Cajero,3,Sur
+15,,2026-02-28,RETIRO,300.00,Retiro en ventanilla,1006,Ahorro,10006,504,Marco Ruiz,Cajero,3,Sur
+16,,2026-02-10,DEPOSITO,1200.00,Deposito en ventanilla,1004,Ahorro,10004,503,Carla Gomez,Cajero,2,Norte
+17,,2026-02-15,RETIRO,600.00,Retiro en ventanilla,1005,Corriente,10005,504,Marco Ruiz,Cajero,3,Sur
+18,,2026-02-20,DEPOSITO,500.00,Deposito en ventanilla,1001,Ahorro,10001,501,Ana Torres,Cajero,2,Norte

@@ -1,0 +1,11 @@
+ClienteDNI,ClienteNombre,ClienteFechaNacimiento,ClienteDireccion,ClienteTelefono,ClienteCorreo
+10001,Jose Morales,2001-03-12,Colonia Centro 5-21,55510001,jose.morales@mail.com
+10002,Maria Lopez,1999-07-08,Colonia Jardin 1-10,55510002,maria.lopez@mail.com
+10003,Carlos Diaz,1995-11-30,Barrio Norte 3-44,55510003,carlos.diaz@mail.com
+10004,Ana Ramirez,2002-01-25,Colonia Norte 4-22,55510004,ana.ramirez@mail.com
+10005,Pedro Castro,1990-05-14,Colonia Sur 8-12,55510005,pedro.castro@mail.com
+10006,Sofia Vega,1998-09-09,Colonia Sur 3-09,55510006,sofia.vega@mail.com
+10002,Maria Lopez,1999-07-08,Colonia Jardin 1-10 Z3,55510002,maria.lopez@mail.com
+10003,Carlos Diaz,1995-11-30,Barrio Norte 3-44,55510033,c.diaz@mail.com
+10005,Pedro Castro,1990-05-14,Colonia Sur 8-12,55510005,
+10006,Sofia Vega,1998-09-09,Colonia Sur 3-09,55510006,sofia.vega@mail.com
