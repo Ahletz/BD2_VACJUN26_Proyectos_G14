@@ -1,0 +1,201 @@
+restauranteId,nombre,anioApertura,rangoPrecio,descripcion
+R001,Restaurante Jiménez y Fajardo S.A.,2023,$$$,Menú de temporada con productos locales y sostenibles.
+R002,Restaurante Lane Inc,2020,$$$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R003,Restaurante Brooks and Sons,2007,$$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R004,Restaurante Ortiz-Rodriguez,1995,$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R005,Restaurante Infraestructuras Roda y asociados S.Coop.,2005,$$$$,Menú de temporada con productos locales y sostenibles.
+R006,Restaurante Fischer-Gutierrez,2014,$$$,Un lugar donde la tradición y la innovación se fusionan en cada plato.
+R007,Restaurante White-Hansen,2021,$$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R008,Restaurante Inversiones Ocaña y asociados S.L.,2021,$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R009,Restaurante Adkins Group,2006,$$$,El punto de encuentro de los amantes de la buena mesa.
+R010,Restaurante Garcia PLC,2007,$,Alta cocina accesible para todos los paladares.
+R011,Restaurante Azorin & Asociados S.Com.,2002,$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R012,Restaurante Brock and Sons,2016,$$$$,Alta cocina accesible para todos los paladares.
+R013,Restaurante Borja y Baró S.C.P,2005,$$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R014,Restaurante Banco TZFB S.L.,2018,$,Sabores auténticos preparados con ingredientes de temporada locales.
+R015,Restaurante Bautista and Sons,2008,$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R016,Restaurante Gonzales-Harris,2005,$$$,Menú de temporada con productos locales y sostenibles.
+R017,Restaurante Mitchell,2013,$$$$,Alta cocina accesible para todos los paladares.
+R018,Restaurante Hall,2023,$$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R019,Restaurante Cotto A.C.,2011,$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R020,Restaurante Osuna y Prats S.Com.,2007,$$$,El punto de encuentro de los amantes de la buena mesa.
+R021,Restaurante Barrientos A.C.,2004,$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R022,Restaurante Barber-Hansen,2010,$,Alta cocina accesible para todos los paladares.
+R023,Restaurante Bailey-Ochoa,2001,$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R024,Restaurante Club Páez y Velasco,2020,$$$,Menú de temporada con productos locales y sostenibles.
+R025,Restaurante Grupo Palomo,2023,$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R026,Restaurante Gordon LLC,2002,$$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R027,Restaurante Industrias Velasco,2013,$$,El punto de encuentro de los amantes de la buena mesa.
+R028,Restaurante María Luisa Hervia Nicolás S.L.N.E,1990,$$,El punto de encuentro de los amantes de la buena mesa.
+R029,Restaurante Teófila Amorós Toledo S.A.,1992,$,Alta cocina accesible para todos los paladares.
+R030,Restaurante Garay,2008,$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R031,Restaurante Villalonga & Asociados S.L.,1996,$,Menú de temporada con productos locales y sostenibles.
+R032,Restaurante Instalaciones Española S.Com.,2008,$$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R033,Restaurante Jones-Velazquez,2018,$$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R034,Restaurante Otero & Asociados S.L.N.E,1993,$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R035,Restaurante Finanzas Valenzuela S.L.,1997,$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R036,Restaurante Proyectos Jaimes y Fonseca,2021,$,Menú de temporada con productos locales y sostenibles.
+R037,Restaurante Proyectos Haro y Moya,1993,$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R038,Restaurante Casares-Berríos,2009,$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R039,Restaurante Vasquez,1997,$$$$,Menú de temporada con productos locales y sostenibles.
+R040,Restaurante Nieto y Mascareñas S.C.,2004,$$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R041,Restaurante Henry-Joyce,2018,$$$,Menú de temporada con productos locales y sostenibles.
+R042,Restaurante Sanders-Christensen,2017,$$$,Menú de temporada con productos locales y sostenibles.
+R043,Restaurante Sotelo y Asociados,1993,$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R044,Restaurante Calixta Antúnez Valverde S.Com.,2003,$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R045,Restaurante Bryant Inc,2000,$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R046,Restaurante Stevens,1994,$$,Un lugar donde la tradición y la innovación se fusionan en cada plato.
+R047,Restaurante Vera,2016,$$$$,Menú de temporada con productos locales y sostenibles.
+R048,Restaurante Farmaceútica Jódar & Asociados S.C.P,2020,$$$,Un lugar donde la tradición y la innovación se fusionan en cada plato.
+R049,Restaurante Diaz-Jimenez,2004,$$$,El punto de encuentro de los amantes de la buena mesa.
+R050,Restaurante Nieves,2019,$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R051,Restaurante Geraldo Castro Granados S.L.L.,2006,$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R052,Restaurante Brock-Peters,1997,$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R053,Restaurante Despacho Globales S.Coop.,2007,$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R054,Restaurante Club Sanabria-Cervantes,1993,$$,El punto de encuentro de los amantes de la buena mesa.
+R055,Restaurante Ferguson,2008,$$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R056,Restaurante Hnos Cabeza S.L.,2019,$$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R057,Restaurante Proyectos Hernández y Rolón,2007,$$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R058,Restaurante Cole LLC,1995,$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R059,Restaurante Palomino y asociados S.Com.,2010,$$$,Un lugar donde la tradición y la innovación se fusionan en cada plato.
+R060,Restaurante Minería YKDH S.A.,1995,$$,Menú de temporada con productos locales y sostenibles.
+R061,Restaurante Morcillo y asociados S.L.,1991,$$$,Menú de temporada con productos locales y sostenibles.
+R062,Restaurante Restauración OGHI S.L.L.,1992,$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R063,Restaurante Quiroga y Bellido S.A.,2023,$$$$,El punto de encuentro de los amantes de la buena mesa.
+R064,Restaurante Logística Internacionales S.L.,2001,$$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R065,Restaurante Jacobs-Foster,1995,$$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R066,Restaurante Viñas y asociados S.Com.,2016,$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R067,Restaurante Castillo e Hijos,1996,$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R068,Restaurante Laboratorios Bétancourt,2016,$$$$,El punto de encuentro de los amantes de la buena mesa.
+R069,Restaurante Construcción WY S.A.,2015,$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R070,Restaurante Construcción GEW S.Com.,1995,$$$,El punto de encuentro de los amantes de la buena mesa.
+R071,Restaurante Laboratorios Limón y Quintero,2010,$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R072,Restaurante Anderson and Sons,2022,$,Alta cocina accesible para todos los paladares.
+R073,Restaurante Munguía y Asociados,2019,$$$$,Un lugar donde la tradición y la innovación se fusionan en cada plato.
+R074,Restaurante Adelia Lladó Salgado S.A.,2002,$$$,Menú de temporada con productos locales y sostenibles.
+R075,Restaurante Thompson,2021,$$$$,Un lugar donde la tradición y la innovación se fusionan en cada plato.
+R076,Restaurante Graham,2003,$$$,Alta cocina accesible para todos los paladares.
+R077,Restaurante Calista Gordillo Borrás S.Com.,1998,$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R078,Restaurante Juan y Cortés S.Com.,2021,$,Un lugar donde la tradición y la innovación se fusionan en cada plato.
+R079,Restaurante Corporacin Llamas-Rodarte,2005,$$,El punto de encuentro de los amantes de la buena mesa.
+R080,Restaurante Watts Group,1990,$$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R081,Restaurante Alimentación Ros y asociados S.Coop.,2004,$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R082,Restaurante Esparza-Patiño S. R.L. de C.V.,1997,$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R083,Restaurante Iborra y Cárdenas S.L.,2008,$$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R084,Restaurante Clayton-Walker,2020,$$$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R085,Restaurante Grijalva,2019,$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R086,Restaurante Soluciones Fabra & Asociados S.A.,2002,$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R087,Restaurante Talleres XKZQ S.A.,2007,$$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R088,Restaurante Lopez Inc,2022,$$$,Un lugar donde la tradición y la innovación se fusionan en cada plato.
+R089,Restaurante Desarrollo Ríos & Asociados S.A.U,2008,$$$,Menú de temporada con productos locales y sostenibles.
+R090,Restaurante Salcido S.A.,2021,$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R091,Restaurante Mesa y Valentín S.L.U.,2020,$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R092,Restaurante Hermanos Bernat S.L.L.,2014,$$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R093,Restaurante Jáquez y Asociados,2002,$$,Menú de temporada con productos locales y sostenibles.
+R094,Restaurante Tecnologías JR S.L.L.,2014,$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R095,Restaurante Guzmán-Olmos,1992,$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R096,Restaurante Banco Ibérica S.Coop.,2014,$$$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R097,Restaurante Club Ordóñez y Marrero,2021,$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R098,Restaurante Banco Viñas S.A.,2022,$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R099,Restaurante Finanzas Palomo & Asociados S.L.N.E,2018,$,Alta cocina accesible para todos los paladares.
+R100,Restaurante Gracia-Puente,2019,$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R101,Restaurante Grupo Llorente S.Coop.,2016,$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R102,Restaurante Alimentación Castellana S.Coop.,2020,$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R103,Restaurante Barker-Moore,2015,$,Una experiencia gastronómica única en el corazón de la ciudad.
+R104,Restaurante Grupo Sanabria y Bustos,2014,$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R105,Restaurante Morgan,1992,$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R106,Restaurante Moya e Hijos,2008,$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R107,Restaurante Castillo-Saavedra,2017,$,Sabores auténticos preparados con ingredientes de temporada locales.
+R108,Restaurante Valdez-Montenegro y Asociados,2018,$$,El punto de encuentro de los amantes de la buena mesa.
+R109,Restaurante Banca Privada del Mediterráneo S.Com.,1991,$,Una experiencia gastronómica única en el corazón de la ciudad.
+R110,Restaurante Despacho Rubio,1993,$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R111,Restaurante Goyo Estévez Oliveras S.Com.,2013,$$$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R112,Restaurante Distribuciones Bayón & Asociados S.Coop.,2005,$$$$,Menú de temporada con productos locales y sostenibles.
+R113,Restaurante Santiago & Asociados S.L.,2001,$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R114,Restaurante Gross-Andrade,1995,$$$$,Menú de temporada con productos locales y sostenibles.
+R115,Restaurante Parsons-Allen,2005,$$$$,Menú de temporada con productos locales y sostenibles.
+R116,Restaurante Barrett PLC,1999,$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R117,Restaurante Transportes Globales S.Coop.,2006,$$$$,El punto de encuentro de los amantes de la buena mesa.
+R118,Restaurante Montserrat y Cano S.A.,1990,$$$$,El punto de encuentro de los amantes de la buena mesa.
+R119,Restaurante Williams and Sons,2000,$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R120,Restaurante Ferrer A.C.,2012,$$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R121,Restaurante Construcción Castellana S.Coop.,2006,$$$$,El punto de encuentro de los amantes de la buena mesa.
+R122,Restaurante Begoña Jaén Avilés S.Com.,2002,$$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R123,Restaurante Jones,1996,$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R124,Restaurante Talleres DDWV S.Com.,2012,$$$,El punto de encuentro de los amantes de la buena mesa.
+R125,Restaurante Colon LLC,1991,$$$$,El punto de encuentro de los amantes de la buena mesa.
+R126,Restaurante Navarro LLC,1990,$,Menú de temporada con productos locales y sostenibles.
+R127,Restaurante Industrias Calderón y Campos,2021,$$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R128,Restaurante Schmidt and Sons,2012,$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R129,Restaurante Industrias Duarte y Valdez,2006,$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R130,Restaurante Perry,1992,$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R131,Restaurante Julia Roldán Calvet S.A.,1992,$$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R132,Restaurante Santana,1995,$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R133,Restaurante Ramos,2016,$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R134,Restaurante Revilla y asociados S.L.L.,1998,$$$,Alta cocina accesible para todos los paladares.
+R135,Restaurante Fábrica del Mediterráneo S.L.,2022,$$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R136,Restaurante Ward-Chavez,2006,$$$$,El punto de encuentro de los amantes de la buena mesa.
+R137,Restaurante Familia Luís S.Coop.,2011,$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R138,Restaurante Holder LLC,1994,$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R139,Restaurante Grupo Gallegos,2015,$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R140,Restaurante Ellison-Dixon,2015,$,El punto de encuentro de los amantes de la buena mesa.
+R141,Restaurante Moore,1997,$$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R142,Restaurante Corporacin Verduzco,2006,$$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R143,Restaurante Compañía Pulido & Asociados S.L.,1996,$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R144,Restaurante Mcguire-Thompson,1991,$$$,Menú de temporada con productos locales y sostenibles.
+R145,Restaurante Johnston,2004,$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R146,Restaurante Hnos Bermudez S.L.,2009,$$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R147,Restaurante Rovira y asociados S.L.N.E,1998,$,Un lugar donde la tradición y la innovación se fusionan en cada plato.
+R148,Restaurante Laboratorios Zarate y Alba,2009,$$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R149,Restaurante Reyes,1996,$$,Alta cocina accesible para todos los paladares.
+R150,Restaurante Hernandez,1998,$$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R151,Restaurante Ramírez,2013,$$$$,Menú de temporada con productos locales y sostenibles.
+R152,Restaurante Walker LLC,1999,$$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R153,Restaurante Desarrollo Navarrete S.A.,2021,$$$$,El punto de encuentro de los amantes de la buena mesa.
+R154,Restaurante Williams,1992,$$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R155,Restaurante Ayala-Anderson,2018,$$$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R156,Restaurante Valdivia y Fajardo S.C.,2013,$,Una experiencia gastronómica única en el corazón de la ciudad.
+R157,Restaurante Industrias Ibéricos S.A.,2012,$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R158,Restaurante Borrás & Asociados S.L.,2007,$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R159,Restaurante Olivé & Asociados S.Com.,2019,$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R160,Restaurante Johnson,1991,$,Una experiencia gastronómica única en el corazón de la ciudad.
+R161,Restaurante Hanson-Alexander,2005,$$,Menú de temporada con productos locales y sostenibles.
+R162,Restaurante Laboratorios Niño y Cortés,2003,$,Alta cocina accesible para todos los paladares.
+R163,Restaurante Rodriguez Inc,2003,$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R164,Restaurante Proyectos Loera-Alcaraz,2011,$$,Menú de temporada con productos locales y sostenibles.
+R165,Restaurante Inversiones YRM S.A.T.,1990,$$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R166,Restaurante Christensen,1998,$$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R167,Restaurante Ocampo S. R.L. de C.V.,1997,$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R168,Restaurante Williams,1990,$$$,Cocina de autor con técnicas contemporáneas y raíces tradicionales.
+R169,Restaurante Nelson,2010,$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R170,Restaurante Juárez,2006,$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R171,Restaurante Proyectos Olvera,2016,$,Sabores auténticos preparados con ingredientes de temporada locales.
+R172,Restaurante Garcia,2020,$$$$,Una experiencia gastronómica única en el corazón de la ciudad.
+R173,Restaurante Lopez PLC,2022,$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R174,Restaurante Familia Huertas S.L.N.E,2022,$$,Menú de temporada con productos locales y sostenibles.
+R175,Restaurante Trillo y asociados S.L.,1992,$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R176,Restaurante Mora-Mota e Hijos,1991,$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R177,Restaurante Inmobiliaria Castellana S.L.,2015,$$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R178,Restaurante Hermanos Gomis S.A.,2021,$$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R179,Restaurante Compañía Piña S.Coop.,1995,$$$,Menú de temporada con productos locales y sostenibles.
+R180,Restaurante Salas,1999,$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R181,Restaurante Simmons LLC,2007,$$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R182,Restaurante Cole-Anderson,2023,$$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R183,Restaurante Carpenter Ltd,2022,$$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R184,Restaurante Corporacin Soria-Cervántez,1997,$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R185,Restaurante Distribuciones Moll S.A.,2018,$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R186,Restaurante Wilson,2011,$$$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R187,Restaurante Cannon Group,2016,$,Una experiencia gastronómica única en el corazón de la ciudad.
+R188,Restaurante Supermercados Llanos & Asociados S.L.,2017,$$$,El punto de encuentro de los amantes de la buena mesa.
+R189,Restaurante Grupo Alvarez-Jaramillo,2013,$$,Donde cada visita se convierte en un viaje culinario inolvidable.
+R190,Restaurante Salazar,1994,$,Sabores auténticos preparados con ingredientes de temporada locales.
+R191,Restaurante Bétancourt-Romero S.A.,1995,$$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R192,Restaurante Harrison,2013,$$,Alta cocina accesible para todos los paladares.
+R193,Restaurante Ainoa Cervantes Céspedes S.A.,1993,$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R194,Restaurante Alejandro,2016,$$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
+R195,Restaurante Proyectos Flores y Barraza,1993,$$$,Menú de temporada con productos locales y sostenibles.
+R196,Restaurante Saiz y Meléndez y Asociados,2009,$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R197,Restaurante Suministros del Mediterráneo S.L.,2022,$$,Ambiente acogedor ideal para reuniones familiares y cenas románticas.
+R198,Restaurante Holloway,2020,$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R199,Restaurante Wheeler,2012,$$$,Sabores auténticos preparados con ingredientes de temporada locales.
+R200,Restaurante Razo-Reyes,2007,$$,"Ingredientes frescos, recetas de familia y pasión por la cocina."
