@@ -1,0 +1,16 @@
+tipoCocinaId,nombre,descripcion
+TC001,Italiana,"Pastas, pizzas y risottos con ingredientes mediterráneos."
+TC002,Mexicana,"Tacos, enchiladas y mole con sabores picantes y coloridos."
+TC003,Japonesa,"Sushi, ramen y tempura con presentación minimalista."
+TC004,Francesa,Alta cocina clásica con salsas elaboradas y repostería fina.
+TC005,China,"Woks, dim sum y sopas con cinco sabores equilibrados."
+TC006,Griega,"Kebabs, tzatziki y ensalada griega con aceite de oliva."
+TC007,Española,"Tapas, paella y tortilla con ingredientes ibéricos."
+TC008,India,"Currys, biryanis y naan con especias aromáticas intensas."
+TC009,Peruana,"Ceviche, lomo saltado y anticuchos con fusión andina."
+TC010,Americana,"Hamburguesas, barbacoa y comfort food de gran tamaño."
+TC011,Tailandesa,"Pad thai, curries verdes y sopas con leche de coco."
+TC012,Árabe,"Falafel, hummus y shawarma con especias del Oriente Medio."
+TC013,Guatemalteca,"Pepián, kaq ik y tamales con sabores mayas ancestrales."
+TC014,Coreana,"Bibimbap, bulgogi y kimchi con fermentados tradicionales."
+TC015,Mediterránea,"Mariscos, aceitunas y hierbas frescas del mar interior."
