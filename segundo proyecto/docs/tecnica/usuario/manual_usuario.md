@@ -1,7 +1,7 @@
 # Manual de Usuario
 
 ## Sistema de Recomendación de Restaurantes con Neo4j  
-### Proyecto 2 — Grupo 14 — BD2 VACJUN26
+### Proyecto 2 — Grupo 14- Lizz Andrea Morelia Castellanos Salazar —201708997- BD2 VACJUN26
 
 ---
 
@@ -25,7 +25,7 @@
 6. Haz clic en **Create** y luego en **Start**
 
 
-![alt text](<../imagen/Neo4j .png>)
+![alt text](../imagen/image-1.png)
 
 ### Opción B: Neo4j Community Edition
 
@@ -134,7 +134,9 @@ Abre `cypher/load/03_load_relaciones.cypher` y ejecuta todos los bloques en orde
 
 ```cypher
 MATCH ()-[r]->() RETURN type(r) AS Relacion, count(r) AS Total ORDER BY Total DESC;
+
 ```
+![alt text](../imagen/nodos_relaciones.png)
 
 ---
 
@@ -152,6 +154,10 @@ ORDER BY cantidadTipos DESC LIMIT 20;
 
 **Interpretación:** Muestra cuántas categorías gastronómicas cubre cada restaurante. Un restaurante con 3 tipos tiene mayor diversidad de oferta.
 
+![alt text](../imagen/consulta1.png)
+
+![alt text](../imagen/consultauno.png)
+
 ### Consulta 2 – Tasa de reservas
 
 ```cypher
@@ -163,6 +169,8 @@ ORDER BY tasaReservaPct DESC LIMIT 20;
 ```
 
 **Interpretación:** Porcentajes altos indican restaurantes donde los clientes planifican con anticipación, señal de alta demanda.
+
+![alt text](../imagen/consulta2.png)
 
 ### Consulta 3 – Gasto promedio por usuario
 
@@ -176,6 +184,8 @@ ORDER BY gastoPromedio DESC LIMIT 20;
 
 **Interpretación:** Identifica usuarios de alto valor para estrategias de fidelización.
 
+![alt text](../imagen/consulta3.png)
+
 ### Consulta 4 – Frecuencia de visitas en un período
 
 Modifica las fechas según el período que desees analizar:
@@ -187,7 +197,8 @@ WHERE v.fechaVisita >= fi AND v.fechaVisita <= ff
 RETURN u.nombre, count(v) AS visitasEnPeriodo
 ORDER BY visitasEnPeriodo DESC LIMIT 20;
 ```
-
+![
+](../imagen/consulta4.png)S
 ### Consulta 5 – Restaurantes sin visitas recientes
 
 Cambia `P180D` por el número de días deseado (ej. `P90D` = 90 días):
