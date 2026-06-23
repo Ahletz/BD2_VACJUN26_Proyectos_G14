@@ -1,9 +1,4 @@
-// ============================================================
-// 03_load_relaciones.cypher
-// Proyecto 2 – Sistema de Recomendación de Restaurantes
-// Grupo 14 – BD2 VACJUN26
-//
-// Carga masiva de relaciones desde archivos CSV.
+
 // Ejecutar DESPUÉS de 02_load_nodos.cypher.
 // ============================================================
 

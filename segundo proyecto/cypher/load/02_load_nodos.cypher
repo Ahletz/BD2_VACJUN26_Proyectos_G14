@@ -1,13 +1,12 @@
 // ============================================================
 // 02_load_nodos.cypher
-// Proyecto 2 – Sistema de Recomendación de Restaurantes
-// Grupo 14 – BD2 VACJUN26
+//  Sistema de Recomendación de Restaurantes
 //
 // Carga masiva de nodos desde archivos CSV.
 // Requiere que los archivos CSV estén en el directorio
 // import/ de Neo4j (neo4j/import/).
 //
-// IMPORTANTE: Ejecutar 01_schema.cypher primero.
+// Ejecutar 01_schema.cypher primero.
 // Ajusta la ruta base si usas Neo4j Desktop:
 //   File > Open Folder > Import
 // ============================================================

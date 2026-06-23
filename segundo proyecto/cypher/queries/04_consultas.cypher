@@ -1,7 +1,5 @@
 // ============================================================
 // 04_consultas.cypher
-// Proyecto 2 – Sistema de Recomendación de Restaurantes
-// Grupo 14 – BD2 VACJUN26
 //
 // Las 9 consultas de negocio obligatorias.
 // Cada consulta está documentada con propósito, parámetros
